@@ -10,21 +10,20 @@ namespace resolucion.clases
 		private string titulo, autor, editorial, estado, dniSocioPrestado;
 		private DateTime fechaPrestamo, fechaDevolucion;
 		
-		public Libro(int codigo, string titulo, string autor, string editorial, string estado, string dniSocioPrestado, DateTime fechaPrestamo, DateTime fechaDevolucion)
+		public Libro(int codigo, string titulo, string autor, string editorial, string dniSocioPrestado)
 		{
 			this.codigo = codigo;
 			this.titulo = titulo;
 			this.autor = autor;
 			this.editorial = editorial;
-			this.estado = estado;
+			estado = "disponible"; // Todo libro al crearse está disponible.
 			this.dniSocioPrestado = dniSocioPrestado;
-			this.fechaPrestamo = fechaPrestamo;
-			this.fechaDevolucion = fechaDevolucion;
+			fechaPrestamo = DateTime.MinValue; // Inicializamos la fecha minima para indicar que está disponible.
+			fechaDevolucion = DateTime.MinValue;
 		}
 		
 		public int Codigo {
 			get { return codigo; }
-			set { codigo = value; }
 		}
 		
 		public string Titulo {
@@ -44,7 +43,6 @@ namespace resolucion.clases
 		
 		public string Estado {
 			get { return estado; }
-			set { estado = value; }
 		}
 		
 		public string DniSocioPrestado {
@@ -60,6 +58,10 @@ namespace resolucion.clases
 		public DateTime FechaDevolucion {
 			get { return fechaDevolucion; }
 			set { fechaDevolucion = value; }
+		}
+		
+		public bool estaDisponible() {
+			return fechaPrestamo == DateTime.MinValue;
 		}
 	}
 }
