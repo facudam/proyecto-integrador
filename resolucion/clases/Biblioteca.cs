@@ -7,23 +7,33 @@ namespace resolucion.clases
 	
 	public class Biblioteca
 	{
-		
+		private string nombre, direccion;
 		private ArrayList listaDeLibros, listaDeSocios;
 		
-		public Biblioteca()
+		public Biblioteca(string nombre, string direccion)
 		{
+			this.nombre = nombre;
+			this.direccion = direccion;
 			listaDeLibros = new ArrayList();
 			listaDeSocios = new ArrayList();
 		}
 		
+		public string Nombre {
+			get { return nombre; }
+			set { nombre = value; }
+		}
+		
+		public string Direccion {
+			get { return direccion; }
+			set { direccion = value; }
+		}
+		
 		public ArrayList ListaDeLibros {
 			get { return listaDeLibros; }
-			set { listaDeLibros = value; }
 		}
 		
 		public ArrayList ListaDeSocios {
 			get { return listaDeSocios; }
-			set { listaDeSocios = value; }
 		}
 		
 		public void agregarLibro(Libro unLibro) {
