@@ -8,6 +8,7 @@ namespace resolucion.clases
 	{
 		private int codigo;
 		private string titulo, autor, editorial, estado, dniSocioPrestado;
+		private int cantidadDeDiasDePrestamo;
 		private DateTime fechaPrestamo, fechaDevolucion;
 		
 		public Libro(int codigo, string titulo, string autor, string editorial, string dniSocioPrestado)
@@ -18,6 +19,7 @@ namespace resolucion.clases
 			this.editorial = editorial;
 			estado = "disponible"; // Todo libro al crearse está disponible.
 			this.dniSocioPrestado = dniSocioPrestado;
+			cantidadDeDiasDePrestamo = 15;
 			fechaPrestamo = DateTime.MinValue; // Inicializamos la fecha minima para indicar que está disponible.
 			fechaDevolucion = DateTime.MinValue;
 		}
@@ -50,6 +52,10 @@ namespace resolucion.clases
 			set { dniSocioPrestado = value; }
 		}
 		
+		public int CantidadDeDiasDePrestamo {
+			get { return cantidadDeDiasDePrestamo; }
+		}
+		
 		public DateTime FechaPrestamo {
 			get { return fechaPrestamo; }
 			set { fechaPrestamo = value; }
@@ -62,6 +68,18 @@ namespace resolucion.clases
 		
 		public bool estaDisponible() {
 			return fechaPrestamo == DateTime.MinValue;
+		}
+		
+		public void asignarLibroPrestado(string dni) {
+			dniSocioPrestado = dni;
+		}
+		
+		public void alternarEstado() {
+			if (estado == "disponible") {
+				estado = "prestado";
+			} else {
+				estado = "disponible";
+			}
 		}
 	}
 }
