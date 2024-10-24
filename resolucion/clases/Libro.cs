@@ -11,14 +11,14 @@ namespace resolucion.clases
 		private int cantidadDeDiasDePrestamo;
 		private DateTime fechaPrestamo, fechaDevolucion;
 		
-		public Libro(int codigo, string titulo, string autor, string editorial, string dniSocioPrestado)
+		public Libro(int codigo, string titulo, string autor, string editorial)
 		{
 			this.codigo = codigo;
 			this.titulo = titulo;
 			this.autor = autor;
 			this.editorial = editorial;
 			estado = "disponible"; // Todo libro al crearse está disponible.
-			this.dniSocioPrestado = dniSocioPrestado;
+			dniSocioPrestado = "0"; // Al crearse y estar libre es 0.
 			cantidadDeDiasDePrestamo = 15;
 			fechaPrestamo = DateTime.MinValue; // Inicializamos la fecha minima para indicar que está disponible.
 			fechaDevolucion = DateTime.MinValue;
@@ -49,7 +49,6 @@ namespace resolucion.clases
 		
 		public string DniSocioPrestado {
 			get { return dniSocioPrestado; }
-			set { dniSocioPrestado = value; }
 		}
 		
 		public int CantidadDeDiasDePrestamo {
@@ -58,12 +57,10 @@ namespace resolucion.clases
 		
 		public DateTime FechaPrestamo {
 			get { return fechaPrestamo; }
-			set { fechaPrestamo = value; }
 		}
 		
 		public DateTime FechaDevolucion {
 			get { return fechaDevolucion; }
-			set { fechaDevolucion = value; }
 		}
 		
 		public bool estaDisponible() {
@@ -72,6 +69,14 @@ namespace resolucion.clases
 		
 		public void asignarLibroPrestado(string dni) {
 			dniSocioPrestado = dni;
+			fechaPrestamo = DateTime.Now;
+			FechaDevolucion = fechaPrestamo.AddDays(cantidadDeDiasDePrestamo);
+		}
+		
+		public void volverADisponible() {
+			dniSocioPrestado = "0";
+			fechaPrestamo = DateTime.MinValue;
+			fechaDevolucion = DateTime.MinValue;
 		}
 		
 		public void alternarEstado() {
