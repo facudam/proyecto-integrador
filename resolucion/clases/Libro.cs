@@ -71,20 +71,14 @@ namespace resolucion.clases
 			dniSocioPrestado = dni;
 			fechaPrestamo = DateTime.Now;
 			FechaDevolucion = fechaPrestamo.AddDays(cantidadDeDiasDePrestamo);
+			estado = "prestado";
 		}
 		
 		public void volverADisponible() {
 			dniSocioPrestado = "0";
 			fechaPrestamo = DateTime.MinValue;
 			fechaDevolucion = DateTime.MinValue;
-		}
-		
-		public void alternarEstado() {
-			if (estado == "disponible") {
-				estado = "prestado";
-			} else {
-				estado = "disponible";
-			}
+			estado = "disponible";
 		}
 	}
 }
