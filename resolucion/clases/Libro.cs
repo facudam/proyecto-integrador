@@ -70,7 +70,7 @@ namespace resolucion.clases
 		public void asignarLibroPrestado(string dni) {
 			dniSocioPrestado = dni;
 			fechaPrestamo = DateTime.Now;
-			FechaDevolucion = fechaPrestamo.AddDays(cantidadDeDiasDePrestamo);
+			fechaDevolucion = fechaPrestamo.AddDays(cantidadDeDiasDePrestamo);
 			estado = "prestado";
 		}
 		
