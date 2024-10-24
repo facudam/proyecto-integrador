@@ -43,16 +43,12 @@ namespace resolucion.clases
 			get { return cantidadLibrosPrestados; }
 		}
 		
-		public virtual void devolverLibro(Biblioteca biblioteca ,int codigoLibro) {
-			foreach(Libro libro in biblioteca.ListaDeLibros) {
-				if (libro.Codigo == codigoLibro) {
-					libro.Estado = "disponible";
-					libro.FechaPrestamo = DateTime.MinValue; // Establecemos el valor mínimo para referirnos que está disponible.
-					libro.FechaDevolucion = DateTime.MinValue;
-					cantidadLibrosPrestados = 0; // El socio al devolver el libro vuelve a tener 0 librosPrestados.
-					break;
-				}
-			}
+		public virtual void incrementarCantidadDeLibros() {
+			if (cantidadLibrosPrestados == 0) cantidadLibrosPrestados += 1;
+		}
+		
+		public virtual void decrementarCantidadDeLibros() {
+			if (cantidadLibrosPrestados == 1) cantidadLibrosPrestados -= 1;
 		}
 	}
 }
