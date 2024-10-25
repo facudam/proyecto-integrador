@@ -1,0 +1,6 @@
+C:\Users\USURIO\Documents\SharpDevelop Projects\proyectoIntegrador\resolucion\bin\Debug\resolucion.exe.config
+C:\Users\USURIO\Documents\SharpDevelop Projects\proyectoIntegrador\resolucion\bin\Debug\resolucion.exe
+C:\Users\USURIO\Documents\SharpDevelop Projects\proyectoIntegrador\resolucion\bin\Debug\resolucion.pdb
+C:\Users\USURIO\Documents\SharpDevelop Projects\proyectoIntegrador\resolucion\obj\Debug\resolucion.csprojResolveAssemblyReference.cache
+C:\Users\USURIO\Documents\SharpDevelop Projects\proyectoIntegrador\resolucion\obj\Debug\resolucion.exe
+C:\Users\USURIO\Documents\SharpDevelop Projects\proyectoIntegrador\resolucion\obj\Debug\resolucion.pdb
