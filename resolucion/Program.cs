@@ -62,13 +62,21 @@ namespace resolucion
 				
 			} while (continuarEligiendoUnaOpcion);
 			
-			
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
 		}
 		
 		public static void agregarUnLibroEn_ConCodigoBase_(Biblioteca unaBiblioteca, ref int codigoParaLibro) {
-			
+			Console.WriteLine("\nIngrese el título del libro.");
+			string titulo = Console.ReadLine();
+			Console.WriteLine("Ingrese el nombre del autor");
+			string nombreAutor = Console.ReadLine();
+			Console.WriteLine("Por último, ingrese el nombre de la editorial.");
+			string editorial = Console.ReadLine();
+			Libro nuevoLibro = new Libro(codigoParaLibro, titulo, nombreAutor, editorial);
+			unaBiblioteca.agregarLibro(nuevoLibro);
+			Console.WriteLine("¡Se ha añadido el libro {0} correctamente. El código del libro es: {1}.", nuevoLibro.Titulo, nuevoLibro.Codigo);
+			codigoParaLibro+= 1; // Incrementamos su valor para el próximo libro a ingresar.
 		}
 	}
 }
