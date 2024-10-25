@@ -24,7 +24,7 @@ namespace resolucion
 			bool continuarEligiendoUnaOpcion = true;
 			int codigoBase = 5;
 			
-			do {
+			while (continuarEligiendoUnaOpcion) {
 				
 				Console.WriteLine("\nElija una opción:\n1- Agregar un nuevo libro.\n2- Eliminar un libro.\n3- Ingresar nuevo socio o lector. \n4- Dar de bajar a un socio o lector.\n5- Prestar un libro.\n6- Devolver un libro.\n7- Solicitar información de la biblioteca.\n8- Salir.");
 				string respuesta = Console.ReadLine();
@@ -59,8 +59,7 @@ namespace resolucion
 						Console.WriteLine("Por favor, ingrese una opción correcta.");
 						break;
 				}
-				
-			} while (continuarEligiendoUnaOpcion);
+			};
 			
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
