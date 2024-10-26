@@ -31,10 +31,7 @@ namespace resolucion.clases
 		}
 		
 		public override void decrementarCantidadDeLibros() {
-			if (cantidadLibrosPrestados != 0) {
-				cantidadLibrosPrestados -= 1;
-			}
-				
+			if (cantidadLibrosPrestados > 0) cantidadLibrosPrestados -= 1;
 		}
 	}
 }
