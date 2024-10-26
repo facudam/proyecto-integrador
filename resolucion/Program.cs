@@ -26,7 +26,7 @@ namespace resolucion
 			
 			while (continuarEligiendoUnaOpcion) {
 				
-				Console.WriteLine("\nElija una opción:\n1- Agregar un nuevo libro.\n2- Eliminar un libro.\n3- Ingresar nuevo socio o lector. \n4- Dar de bajar a un socio o lector.\n5- Prestar un libro.\n6- Devolver un libro.\n7- Solicitar información de la biblioteca.\n8- Salir.");
+				Console.WriteLine("\nElija una opción:\n1- Agregar un nuevo libro.\n2- Eliminar un libro.\n3- Ingresar nuevo socio o lector de sala. \n4- Dar de bajar a un socio o lector.\n5- Prestar un libro.\n6- Devolver un libro.\n7- Solicitar información de la biblioteca.\n8- Salir.");
 				string respuesta = Console.ReadLine();
 				
 				switch(respuesta) {
@@ -37,10 +37,10 @@ namespace resolucion
 						eliminarUnLibroDe_(biblioteca);
 						break;
 					case "3":
-						ingresarNuevoSocioOLectorEn_(biblioteca);
+						ingresarNuevoSocioOLectorDeSalaEn_(biblioteca);
 						break;
 					case "4":
-						eliminarSocioOLectorDe_(biblioteca);
+						eliminarSocioOLectorDeSalaEn_(biblioteca);
 						break;
 					case "5":
 						prestarUnLibroDe_(biblioteca);
@@ -56,7 +56,7 @@ namespace resolucion
 						Console.WriteLine("Muchas gracias por haber usado nuestro sistema.");
 						break;
 					default:
-						Console.WriteLine("Por favor, ingrese una opción correcta.");
+						Console.WriteLine("\nPor favor, ingrese una opción correcta.");
 						break;
 				}
 			};
@@ -76,6 +76,38 @@ namespace resolucion
 			unaBiblioteca.agregarLibro(nuevoLibro);
 			Console.WriteLine("¡Se ha añadido el libro {0} correctamente. El código del libro es: {1}.", nuevoLibro.Titulo, nuevoLibro.Codigo);
 			codigoParaLibro+= 1; // Incrementamos su valor para el próximo libro a ingresar.
+		}
+		
+		public static void ingresarNuevoSocioOLectorDeSalaEn_(Biblioteca biblioteca) {
+			Console.WriteLine("\nIngrese el DNI de la persona a asociar.");
+			string dni = Console.ReadLine();
+			Console.WriteLine("Ingrese el nombre completo.");
+			string nombreCompleto = Console.ReadLine();
+			Console.WriteLine("Ingrese el número de teléfono.");
+			string telefono = Console.ReadLine();
+			Console.WriteLine("Ingrese la dirección.");
+			string direccion = Console.ReadLine();
+			
+			Console.WriteLine("Y finalmente, elija el tipo de socio que será:\n1- Ingresarlo como nuevo socio lector.\n2- Ingresarlo como nuevo lector de sala.\n3- Volver a menú principal.");
+			string opcionElegida = Console.ReadLine();
+			
+			switch(opcionElegida) {
+				case "1":
+					Socio nuevoSocio = new Socio(dni, nombreCompleto, telefono, direccion);
+					biblioteca.agregarUnSocio(nuevoSocio);
+					Console.WriteLine("\nEl socio {0} ha sido añadido exitosamente!", nuevoSocio.NombreCompleto);
+					break;
+				case "2":
+					LectorDeSala nuevoLectorDeSala = new LectorDeSala(dni, nombreCompleto, telefono, direccion);
+					biblioteca.agregarUnSocio(nuevoLectorDeSala);
+					Console.WriteLine("\nEl lector de sala {0} ha sido añadido exitosamente!", nuevoLectorDeSala.NombreCompleto);
+					break;
+				case "3":
+					break; // No hay mensaje, solo termina y vuelve al menú principal.
+				default:
+					Console.WriteLine("La opción elegida es incorrecta.");
+					break;
+			}
 		}
 	}
 }
