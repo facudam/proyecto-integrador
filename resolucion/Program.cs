@@ -109,5 +109,59 @@ namespace resolucion
 					break;
 			}
 		}
+		
+		public static void imprimirSubmenuDe_(Biblioteca biblioteca) {
+			Console.WriteLine("Ingrese la opción de desee:\n1- Ver lista de libros prestados.\n2- Ver lista de libros de la biblioteca.\n3- Ver lista de socios de la biblioteca.\n4- Volver a menú principal.");
+			string respuesta = Console.ReadLine();
+			
+			switch(respuesta) {
+				case "1":
+					listarLibrosPrestadosDe_(biblioteca);
+					break;
+				case "2":
+					listarLibrosDe_(biblioteca);
+					break;
+				case "3":
+					listarSociosDe_(biblioteca);
+					break;
+				case "4":
+					break;
+				default:
+					Console.WriteLine("La opción ingresada es incorrecta.");
+					break;
+			}
+		}
+		
+		public static void listarLibrosPrestadosDe_(Biblioteca biblioteca) {
+			Console.WriteLine("\nLista de libros prestados:");
+			int cantidadLibrosPrestados = 0;
+			
+			foreach(Libro unLibro in biblioteca.ListaDeLibros) {
+				if (!unLibro.estaDisponible()) {
+					Console.WriteLine("Titulo: {0}, autor: {1}, fecha de devolución: {2}", unLibro.Titulo, unLibro.Autor, unLibro.FechaDevolucion);
+					cantidadLibrosPrestados += 1; // Para controlar si no hay libros prestados aún.
+				}
+			}
+			if (cantidadLibrosPrestados == 0) Console.WriteLine("Aún no hay libros prestados.");
+		}
+		
+		public static void listarLibrosDe_(Biblioteca biblioteca) {
+			Console.WriteLine("\nLista de libros de la biblioteca:");
+			foreach(Libro unLibro in biblioteca.ListaDeLibros) {
+				Console.WriteLine("Titulo: {0}, autor: {1}, editorial: {2}", unLibro.Titulo, unLibro.Autor, unLibro.Editorial);
+			}
+			
+			if (biblioteca.ListaDeLibros.Count == 0) Console.WriteLine("Aún no hay libros en la biblioteca.");
+		}
+		
+		public static void listarSociosDe_(Biblioteca unaBiblioteca) {
+			Console.WriteLine("Lista de socios de la biblioteca:");
+			
+			foreach(Socio unSocio in unaBiblioteca.ListaDeSocios) {
+				Console.WriteLine("Nombre completo: {0}, DNI: {1}, dirección: {2}.", unSocio.NombreCompleto, unSocio.Dni, unSocio.Direccion);
+			}
+			
+			if (unaBiblioteca.ListaDeSocios.Count == 0) Console.WriteLine("Aún no hay socios ingresados en la biblioteca.");
+		}
 	}
 }
