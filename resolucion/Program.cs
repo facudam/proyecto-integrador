@@ -40,9 +40,9 @@ namespace resolucion
 					case "3":
 						ingresarNuevoSocioOLectorDeSalaEn_(biblioteca);
 						break;
-//					case "4":
-//						eliminarSocioOLectorDeSalaEn_(biblioteca);
-//						break;
+					case "4":
+						eliminarSocioOLectorDeSalaEn_(biblioteca);
+						break;
 //					case "5":
 //						prestarUnLibroDe_(biblioteca);
 //						break;
@@ -193,6 +193,33 @@ namespace resolucion
 				default:
 					Console.WriteLine("La opción elegida es incorrecta.");
 					break;
+			}
+		}
+		
+		public static void eliminarSocioOLectorDeSalaEn_(Biblioteca biblioteca) {
+			try {
+				Console.WriteLine("Ingrese el DNI del socio a eliminar.");
+				string dni = Console.ReadLine();
+				if (dni.Trim().Length < 1) throw new EmptyValueException("El DNI no puede estar vacío o tener sólo espacios en blanco");
+				
+				bool existeElSocio = false;
+				
+				foreach(Socio unSocio in biblioteca.ListaDeSocios) {
+					if (unSocio.Dni == dni) {
+						if (unSocio.CantidadLibrosPrestados == 0) {
+							biblioteca.eliminarUnSocio(unSocio);
+							Console.WriteLine("Se ha eliminado el socio correctamente!");
+						} else {
+							Console.WriteLine("No se puede eliminar al socio ya que aún posee libros prestados.");
+						}
+						existeElSocio = true;
+						break;
+					}
+				}
+				if (!existeElSocio) Console.WriteLine("No se ha encontrado un socio con el dni ingresado.");
+				
+			} catch (EmptyValueException e) {
+				Console.WriteLine(e.mensaje);
 			}
 		}
 		
