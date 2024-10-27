@@ -232,7 +232,7 @@ namespace resolucion
 					prestarLibroASocioLectorEn_(biblioteca);
 					break;
 				case "2":
-//					prestarLibroALectorDeSalaEN_(biblioteca);
+					prestarLibroALectorDeSalaEN_(biblioteca);
 					break;
 				case "3":
 					break;
@@ -262,11 +262,9 @@ namespace resolucion
 					existeSocio = true;
 					try {
 						if (socio.CantidadLibrosPrestados == 0) {
-							Console.WriteLine("\nSocio habilitado para préstamo");
 							prestarLibroDeBiblioteca_SiPudiereAlSocio_(biblioteca, socio);
 						} else {
 							throw new PrestamoNoPosibleException("\nEl socio ingresado no puede recibir más préstamos.");
-							
 						}
 					} catch (PrestamoNoPosibleException e) {
 						Console.WriteLine(e.Mensaje);
@@ -274,13 +272,10 @@ namespace resolucion
 					break;
 				}
 			}
-			
 			if (!existeSocio) {
 				Console.WriteLine("El DNI ingresado no pertecence a un socio de la {0}", biblioteca.Nombre);
 			}
-			
 		}
-		
 		
 		
 		public static void prestarLibroDeBiblioteca_SiPudiereAlSocio_(Biblioteca unaBiblioteca, Socio socio) {
@@ -303,9 +298,13 @@ namespace resolucion
 				if (libro.Codigo == codigoLibro) {
 					try {
 						if (libro.estaDisponible()) {
-							libro.asignarLibroPrestado(socio.Dni);
-							socio.incrementarCantidadDeLibros();
-							Console.WriteLine("\nPréstamo realizado!");
+							LectorDeSala socioALectorDeSala = socio as LectorDeSala; //Si no es un lector de sala "socioALectorDeSala" será null.
+							if (socioALectorDeSala == null) {
+								libro.asignarLibroPrestado(socio.Dni);
+								socio.incrementarCantidadDeLibros();
+								Console.WriteLine("\nPréstamo realizado!");
+							} else Console.WriteLine("El socio ingresado es lector de sala y no puede obtener libros desde esta opcion del menú. Vuelva a intentarlo con la segunda opción.");
+							
 						} else {
 							throw new PrestamoNoPosibleException("El libro solicitado no está disponible para su préstamo.");
 						}
@@ -322,6 +321,76 @@ namespace resolucion
 		}
 		
 		
+		public static void prestarLibroALectorDeSalaEN_(Biblioteca biblioteca) {
+			string dni = "";
+			
+			while (dni.Trim().Length < 1) {
+				try {
+					Console.WriteLine("\nIngrese el DNI del lector de sala a quien se realizará el préstamo de un libro.");
+					dni = Console.ReadLine();
+					if (dni.Trim().Length < 1) throw new EmptyValueException("El DNI no puede estar vacío o tener sólo espacios vacíos.");
+				} catch (EmptyValueException e) {
+					Console.WriteLine(e.Mensaje);
+				}
+			}
+			
+			bool existeLector = false;
+			
+			foreach(Socio lectorDeSala in biblioteca.ListaDeSocios) {
+				if (lectorDeSala.Dni == dni) {
+					existeLector = true;
+					prestarLibroDeBiblioteca_SiPudiereAlLectorDeSala_(biblioteca, lectorDeSala);
+					break;
+				}
+			}
+			
+			if (!existeLector) {
+				Console.WriteLine("El DNI ingresado no pertecence a un lector de sala de la {0}", biblioteca.Nombre);
+			}
+		}
+		
+		public static void prestarLibroDeBiblioteca_SiPudiereAlLectorDeSala_(Biblioteca biblioteca,Socio lectorDeSala) {
+			int codigoLibro;
+			
+			while (true) {
+				try {
+					Console.WriteLine("\nIngrese el código del libro a prestar.");
+					codigoLibro = int.Parse(Console.ReadLine());
+					break;
+					
+				} catch (FormatException e) {
+					Console.WriteLine(e.Message);
+				}
+			}
+			
+			bool existeLibro = false;
+			
+			foreach(Libro libro in biblioteca.ListaDeLibros) {
+				if (libro.Codigo == codigoLibro) {
+					try {
+						if (libro.estaDisponible()) {
+							// Verificamos si lectorDeSala es de tipo LectorDeSala usando el operador "as"
+		                    LectorDeSala lectorConLista = lectorDeSala as LectorDeSala;
+		                    if (lectorConLista != null) { // Si lectorConLista no es null significa que sí era de tipo LectorDeSala.
+		                    	libro.asignarLibroPrestado(lectorDeSala.Dni);
+								lectorDeSala.incrementarCantidadDeLibros();
+		                        lectorConLista.agregarLibroALista(libro);
+		                        Console.WriteLine("\nPréstamo realizado!");
+		                    } else Console.WriteLine("El socio no es un lector de sala y no puede recibir el libro desde esta opción. Por favor, elija la opción que corresponda en el menu anterior.");
+						} else {
+							throw new PrestamoNoPosibleException("El libro solicitado no está disponible para su préstamo.");
+						}
+					} catch (PrestamoNoPosibleException e) {
+						Console.WriteLine(e.Mensaje);
+					}
+					existeLibro = true;
+					break;
+				}
+			}
+			if (!existeLibro) {
+				Console.WriteLine("El código del libro solicitado no pertenece a un libro de la biblioteca.");
+			}
+		}
 		
 		public static void imprimirSubmenuDe_(Biblioteca biblioteca) {
 			Console.WriteLine("Ingrese la opción de desee:\n1- Ver lista de libros prestados.\n2- Ver lista de libros de la biblioteca.\n3- Ver lista de socios de la biblioteca.\n4- Volver a menú principal.");
