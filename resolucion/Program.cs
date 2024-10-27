@@ -34,9 +34,9 @@ namespace resolucion
 					case "1":
 						agregarUnLibroEn_ConCodigoBase_(biblioteca, ref codigoBase);
 						break;
-//					case "2":
-//						eliminarUnLibroDe_(biblioteca);
-//						break;
+					case "2":
+						eliminarUnLibroDe_(biblioteca);
+						break;
 					case "3":
 						ingresarNuevoSocioOLectorDeSalaEn_(biblioteca);
 						break;
@@ -103,6 +103,32 @@ namespace resolucion
 			unaBiblioteca.agregarLibro(nuevoLibro);
 			Console.WriteLine("¡Se ha añadido el libro {0} correctamente. El código del libro es: {1}.", nuevoLibro.Titulo, nuevoLibro.Codigo);
 			codigoParaLibro+= 1; // Incrementamos su valor para el próximo libro a ingresar.
+		}
+		
+		
+		public static void eliminarUnLibroDe_(Biblioteca biblioteca) {
+			try {
+				Console.WriteLine("Ingrese el código del libro");
+				int codigo = int.Parse(Console.ReadLine());
+				bool existeEseLibro = false;
+				
+				foreach(Libro unLibro in biblioteca.ListaDeLibros) {
+					if (unLibro.Codigo == codigo) {
+						if (unLibro.estaDisponible()) {
+							biblioteca.eliminarUnLibro(unLibro);
+							Console.WriteLine("El libro se ha eliminado exitosamente!");
+						} else {
+							Console.WriteLine("No se puede eliminar el libro porque se encuentra prestado a un socio.");
+						}
+						existeEseLibro = true;
+						break;
+					}
+				}
+				if (!existeEseLibro) Console.WriteLine("\nEl código ingresado no pertenece a un libro de la biblioteca.");
+				
+			} catch (FormatException e) {
+				Console.WriteLine(e.Message);
+			}
 		}
 		
 		public static void ingresarNuevoSocioOLectorDeSalaEn_(Biblioteca biblioteca) {
