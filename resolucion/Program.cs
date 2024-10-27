@@ -2,6 +2,7 @@
 using System;
 using resolucion.clases;
 using System.Collections;
+using resolucion.excepciones;
 
 namespace resolucion
 {
@@ -33,21 +34,21 @@ namespace resolucion
 					case "1":
 						agregarUnLibroEn_ConCodigoBase_(biblioteca, ref codigoBase);
 						break;
-					case "2":
-						eliminarUnLibroDe_(biblioteca);
-						break;
+//					case "2":
+//						eliminarUnLibroDe_(biblioteca);
+//						break;
 					case "3":
 						ingresarNuevoSocioOLectorDeSalaEn_(biblioteca);
 						break;
-					case "4":
-						eliminarSocioOLectorDeSalaEn_(biblioteca);
-						break;
-					case "5":
-						prestarUnLibroDe_(biblioteca);
-						break;
-					case "6":
-						devolverUnLibroDe_(biblioteca);
-						break;
+//					case "4":
+//						eliminarSocioOLectorDeSalaEn_(biblioteca);
+//						break;
+//					case "5":
+//						prestarUnLibroDe_(biblioteca);
+//						break;
+//					case "6":
+//						devolverUnLibroDe_(biblioteca);
+//						break;
 					case "7":
 						imprimirSubmenuDe_(biblioteca);
 						break;
@@ -66,12 +67,38 @@ namespace resolucion
 		}
 		
 		public static void agregarUnLibroEn_ConCodigoBase_(Biblioteca unaBiblioteca, ref int codigoParaLibro) {
-			Console.WriteLine("\nIngrese el título del libro.");
-			string titulo = Console.ReadLine();
-			Console.WriteLine("Ingrese el nombre del autor");
-			string nombreAutor = Console.ReadLine();
-			Console.WriteLine("Por último, ingrese el nombre de la editorial.");
-			string editorial = Console.ReadLine();
+			string titulo = "", nombreAutor = "", editorial = "";
+			
+			while(titulo.Trim().Length < 1) {
+				try {
+					Console.WriteLine("\nIngrese el título del libro.");
+					titulo = Console.ReadLine();
+					if (titulo.Trim().Length < 1) throw new EmptyValueException("El título no puede estar vacío o sólo contener espacios en blanco.");
+				} catch(EmptyValueException e) {
+					Console.WriteLine(e.mensaje);
+				}	
+			}
+				
+			while(nombreAutor.Trim().Length < 1) {
+				try {
+					Console.WriteLine("Ingrese el nombre del autor");
+					nombreAutor = Console.ReadLine();
+					if (nombreAutor.Trim().Length < 1) throw new EmptyValueException("El nombre del autor no puede estar vacío o sólo contener espacios en blanco.");
+				} catch(EmptyValueException e) {
+					Console.WriteLine(e.mensaje);
+				}
+			}
+			
+			while (editorial.Trim().Length < 1) {
+				try {
+					Console.WriteLine("Por último, ingrese el nombre de la editorial.");
+					editorial = Console.ReadLine();
+					if (editorial.Trim().Length < 1) throw new EmptyValueException("La editorial no puede estar vacía o sólo contener espacios en blanco.");
+				} catch(EmptyValueException e) {
+					Console.WriteLine(e.mensaje);
+				}	
+			}
+			
 			Libro nuevoLibro = new Libro(codigoParaLibro, titulo, nombreAutor, editorial);
 			unaBiblioteca.agregarLibro(nuevoLibro);
 			Console.WriteLine("¡Se ha añadido el libro {0} correctamente. El código del libro es: {1}.", nuevoLibro.Titulo, nuevoLibro.Codigo);
@@ -79,14 +106,47 @@ namespace resolucion
 		}
 		
 		public static void ingresarNuevoSocioOLectorDeSalaEn_(Biblioteca biblioteca) {
-			Console.WriteLine("\nIngrese el DNI de la persona a asociar.");
-			string dni = Console.ReadLine();
-			Console.WriteLine("Ingrese el nombre completo.");
-			string nombreCompleto = Console.ReadLine();
-			Console.WriteLine("Ingrese el número de teléfono.");
-			string telefono = Console.ReadLine();
-			Console.WriteLine("Ingrese la dirección.");
-			string direccion = Console.ReadLine();
+			string dni = "", nombreCompleto = "", telefono = "", direccion = "";
+			
+			while (dni.Trim().Length < 1) {
+				try {
+					Console.WriteLine("\nIngrese el DNI de la persona a asociar.");
+					dni = Console.ReadLine();
+					if (dni.Trim().Length < 1) throw new EmptyValueException("El DNI no puede estar vacío o sólo contener espacios en blanco.");
+				} catch(EmptyValueException e) {
+					Console.WriteLine(e.mensaje);
+				}
+			}
+			
+			while (nombreCompleto.Trim().Length < 1) {
+				try {
+					Console.WriteLine("Ingrese el nombre completo.");
+					nombreCompleto = Console.ReadLine();
+					if (nombreCompleto.Trim().Length < 1) throw new EmptyValueException("El nombre completo no puede estar vacío o sólo contener espacios en blanco.");
+				} catch(EmptyValueException e) {
+					Console.WriteLine(e.mensaje);
+				}
+			}
+			
+			while (telefono.Trim().Length < 1) {
+				try {
+					Console.WriteLine("Ingrese el número de teléfono.");
+					telefono = Console.ReadLine();
+					if (telefono.Trim().Length < 1) throw new EmptyValueException("El teléfono no puede estar vacío o sólo contener espacios en blanco.");
+				} catch(EmptyValueException e) {
+					Console.WriteLine(e.mensaje);
+				}
+			}
+			
+			while (direccion.Trim().Length < 1) {
+				try {
+					Console.WriteLine("Ingrese la dirección.");
+					direccion = Console.ReadLine();
+					if (direccion.Trim().Length < 1) throw new EmptyValueException("La dirección no puede estar vacía o sólo contener espacios en blanco.");
+				} catch(EmptyValueException e) {
+					Console.WriteLine(e.mensaje);
+				}
+			}
 			
 			Console.WriteLine("Y finalmente, elija el tipo de socio que será:\n1- Ingresarlo como nuevo socio lector.\n2- Ingresarlo como nuevo lector de sala.\n3- Volver a menú principal.");
 			string opcionElegida = Console.ReadLine();
