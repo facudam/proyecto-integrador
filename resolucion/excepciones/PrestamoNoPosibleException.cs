@@ -3,11 +3,11 @@
 namespace resolucion.excepciones
 {
 	
-	public class EmptyValueException : Exception
+	public class PrestamoNoPosibleException: Exception
 	{
 		private string mensaje;
 		
-		public EmptyValueException(string mensaje)
+		public PrestamoNoPosibleException(string mensaje)
 		{
 			this.mensaje = mensaje;
 		}

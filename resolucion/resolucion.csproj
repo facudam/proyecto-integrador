@@ -53,6 +53,7 @@
     <Compile Include="clases\Libro.cs" />
     <Compile Include="clases\Socio.cs" />
     <Compile Include="excepciones\EmptyValueException.cs" />
+    <Compile Include="excepciones\PrestamoNoPosibleException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -43,9 +43,9 @@ namespace resolucion
 					case "4":
 						eliminarSocioOLectorDeSalaEn_(biblioteca);
 						break;
-//					case "5":
-//						prestarUnLibroDe_(biblioteca);
-//						break;
+					case "5":
+						prestarUnLibroDe_(biblioteca);
+						break;
 //					case "6":
 //						devolverUnLibroDe_(biblioteca);
 //						break;
@@ -75,7 +75,7 @@ namespace resolucion
 					titulo = Console.ReadLine();
 					if (titulo.Trim().Length < 1) throw new EmptyValueException("El título no puede estar vacío o sólo contener espacios en blanco.");
 				} catch(EmptyValueException e) {
-					Console.WriteLine(e.mensaje);
+					Console.WriteLine(e.Mensaje);
 				}	
 			}
 				
@@ -85,7 +85,7 @@ namespace resolucion
 					nombreAutor = Console.ReadLine();
 					if (nombreAutor.Trim().Length < 1) throw new EmptyValueException("El nombre del autor no puede estar vacío o sólo contener espacios en blanco.");
 				} catch(EmptyValueException e) {
-					Console.WriteLine(e.mensaje);
+					Console.WriteLine(e.Mensaje);
 				}
 			}
 			
@@ -95,7 +95,7 @@ namespace resolucion
 					editorial = Console.ReadLine();
 					if (editorial.Trim().Length < 1) throw new EmptyValueException("La editorial no puede estar vacía o sólo contener espacios en blanco.");
 				} catch(EmptyValueException e) {
-					Console.WriteLine(e.mensaje);
+					Console.WriteLine(e.Mensaje);
 				}	
 			}
 			
@@ -140,7 +140,7 @@ namespace resolucion
 					dni = Console.ReadLine();
 					if (dni.Trim().Length < 1) throw new EmptyValueException("El DNI no puede estar vacío o sólo contener espacios en blanco.");
 				} catch(EmptyValueException e) {
-					Console.WriteLine(e.mensaje);
+					Console.WriteLine(e.Mensaje);
 				}
 			}
 			
@@ -150,7 +150,7 @@ namespace resolucion
 					nombreCompleto = Console.ReadLine();
 					if (nombreCompleto.Trim().Length < 1) throw new EmptyValueException("El nombre completo no puede estar vacío o sólo contener espacios en blanco.");
 				} catch(EmptyValueException e) {
-					Console.WriteLine(e.mensaje);
+					Console.WriteLine(e.Mensaje);
 				}
 			}
 			
@@ -160,7 +160,7 @@ namespace resolucion
 					telefono = Console.ReadLine();
 					if (telefono.Trim().Length < 1) throw new EmptyValueException("El teléfono no puede estar vacío o sólo contener espacios en blanco.");
 				} catch(EmptyValueException e) {
-					Console.WriteLine(e.mensaje);
+					Console.WriteLine(e.Mensaje);
 				}
 			}
 			
@@ -170,7 +170,7 @@ namespace resolucion
 					direccion = Console.ReadLine();
 					if (direccion.Trim().Length < 1) throw new EmptyValueException("La dirección no puede estar vacía o sólo contener espacios en blanco.");
 				} catch(EmptyValueException e) {
-					Console.WriteLine(e.mensaje);
+					Console.WriteLine(e.Mensaje);
 				}
 			}
 			
@@ -219,9 +219,109 @@ namespace resolucion
 				if (!existeElSocio) Console.WriteLine("No se ha encontrado un socio con el dni ingresado.");
 				
 			} catch (EmptyValueException e) {
-				Console.WriteLine(e.mensaje);
+				Console.WriteLine(e.Mensaje);
 			}
 		}
+		
+		public static void prestarUnLibroDe_(Biblioteca biblioteca) {
+			Console.WriteLine("\nIngrese la opción de desee:\n1- Prestar libro a socio lector.\n2- Prestar libro a lector de sala.\n3- Volver a menú principal.");
+			string respuesta = Console.ReadLine();
+			
+			switch(respuesta) {
+				case "1":
+					prestarLibroASocioLectorEn_(biblioteca);
+					break;
+				case "2":
+//					prestarLibroALectorDeSalaEN_(biblioteca);
+					break;
+				case "3":
+					break;
+				default:
+					Console.WriteLine("La opción ingresada es incorrecta.");
+					break;
+			}
+		}
+		
+		public static void prestarLibroASocioLectorEn_(Biblioteca biblioteca) {
+			string dni = "";
+			
+			while (dni.Trim().Length < 1) {
+				try {
+					Console.WriteLine("\nIngrese el DNI del socio lector a quien se realizará el préstamo de un libro.");
+					dni = Console.ReadLine();
+					if (dni.Trim().Length < 1) throw new EmptyValueException("El DNI no puede estar vacío o tener sólo espacios vacíos.");
+				} catch (EmptyValueException e) {
+					Console.WriteLine(e.Mensaje);
+				}
+			}
+			
+			bool existeSocio = false;
+			
+			foreach(Socio socio in biblioteca.ListaDeSocios) {
+				if (socio.Dni == dni) {
+					existeSocio = true;
+					try {
+						if (socio.CantidadLibrosPrestados == 0) {
+							Console.WriteLine("\nSocio habilitado para préstamo");
+							prestarLibroDeBiblioteca_SiPudiereAlSocio_(biblioteca, socio);
+						} else {
+							throw new PrestamoNoPosibleException("\nEl socio ingresado no puede recibir más préstamos.");
+							
+						}
+					} catch (PrestamoNoPosibleException e) {
+						Console.WriteLine(e.Mensaje);
+					}
+					break;
+				}
+			}
+			
+			if (!existeSocio) {
+				Console.WriteLine("El DNI ingresado no pertecence a un socio de la {0}", biblioteca.Nombre);
+			}
+			
+		}
+		
+		
+		
+		public static void prestarLibroDeBiblioteca_SiPudiereAlSocio_(Biblioteca unaBiblioteca, Socio socio) {
+			int codigoLibro;
+			
+			while (true) {
+				try {
+					Console.WriteLine("\nIngrese el código del libro a prestar.");
+					codigoLibro = int.Parse(Console.ReadLine());
+					break;
+					
+				} catch (FormatException e) {
+					Console.WriteLine(e.Message);
+				}
+			}
+			
+			bool existeLibro = false;
+			
+			foreach(Libro libro in unaBiblioteca.ListaDeLibros) {
+				if (libro.Codigo == codigoLibro) {
+					try {
+						if (libro.estaDisponible()) {
+							libro.asignarLibroPrestado(socio.Dni);
+							socio.incrementarCantidadDeLibros();
+							Console.WriteLine("\nPréstamo realizado!");
+						} else {
+							throw new PrestamoNoPosibleException("El libro solicitado no está disponible para su préstamo.");
+						}
+					} catch (PrestamoNoPosibleException e) {
+						Console.WriteLine(e.Mensaje);
+					}
+					existeLibro = true;
+					break;
+				}
+			}
+			if (!existeLibro) {
+				Console.WriteLine("El código del libro solicitado no pertenece a un libro de la biblioteca.");
+			}
+		}
+		
+		
 		
 		public static void imprimirSubmenuDe_(Biblioteca biblioteca) {
 			Console.WriteLine("Ingrese la opción de desee:\n1- Ver lista de libros prestados.\n2- Ver lista de libros de la biblioteca.\n3- Ver lista de socios de la biblioteca.\n4- Volver a menú principal.");
