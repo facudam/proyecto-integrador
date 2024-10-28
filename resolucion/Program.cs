@@ -448,7 +448,7 @@ namespace resolucion
 			if(!libro.estaDisponible() && (libro.DniSocioPrestado == socio.Dni)) {
 				LectorDeSala lectorConLista = socio as LectorDeSala;
 				libro.volverADisponible();
-		        if (lectorConLista != null) { // Si no es null es lector de sala.
+		        	if (lectorConLista != null) { // Si no es null es lector de sala.
 					lectorConLista.decrementarCantidadDeLibros();
 					lectorConLista.quitarLibroDeLista(libro);
 				} else {
