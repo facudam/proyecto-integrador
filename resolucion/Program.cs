@@ -10,8 +10,8 @@ namespace resolucion
 	{
 		public static void Main(string[] args)
 		{
-			Libro nuevoLibro = new Libro(1, "Cien años de soledad", "Gabriel García Márquez", "Editorial Sudamericana");
-			Libro otroLibro = new Libro(2, "El amor en los tiempos del cólera", "Gabriel García Márquez", "Editorial Oveja Negra");
+			Libro nuevoLibro = new Libro(1, "Cien años de soledad", "Gabriel García Márquez", "Sudamericana");
+			Libro otroLibro = new Libro(2, "El amor en los tiempos del cólera", "Gabriel García Márquez", "Oveja Negra");
 			Libro tercerLibro = new Libro(3,"Don Quijote de la Mancha", "Miguel de Cervantes", "Alfaguara");
 			Libro cuartoLibro = new Libro(4, "Los miserables", "Victor Hugo", "G. Charpentier");
 			
@@ -448,7 +448,7 @@ namespace resolucion
 			if(!libro.estaDisponible() && (libro.DniSocioPrestado == socio.Dni)) {
 				LectorDeSala lectorConLista = socio as LectorDeSala;
 				libro.volverADisponible();
-		        	if (lectorConLista != null) { // Si no es null es lector de sala.
+		        if (lectorConLista != null) { // Si no es null es lector de sala.
 					lectorConLista.decrementarCantidadDeLibros();
 					lectorConLista.quitarLibroDeLista(libro);
 				} else {
@@ -489,7 +489,7 @@ namespace resolucion
 			
 			foreach(Libro unLibro in biblioteca.ListaDeLibros) {
 				if (!unLibro.estaDisponible()) {
-					Console.WriteLine("Titulo: {0}, autor: {1}, fecha de devolución: {2}, DNI del socio poseedor: {3}.", unLibro.Titulo, unLibro.Autor, unLibro.FechaDevolucion, unLibro.DniSocioPrestado);
+					Console.WriteLine("Titulo: {0}, autor: {1}, fecha de devolución: {2}, DNI del socio poseedor: {3}, código del libro: {4}.", unLibro.Titulo, unLibro.Autor, unLibro.FechaDevolucion, unLibro.DniSocioPrestado, unLibro.Codigo);
 					cantidadLibrosPrestados += 1; // Para controlar si no hay libros prestados aún.
 				}
 			}
@@ -499,7 +499,7 @@ namespace resolucion
 		public static void listarLibrosDe_(Biblioteca biblioteca) {
 			Console.WriteLine("\nLista de libros de la biblioteca:");
 			foreach(Libro unLibro in biblioteca.ListaDeLibros) {
-				Console.WriteLine("Titulo: {0}, autor: {1}, editorial: {2}, estado: {3}.", unLibro.Titulo, unLibro.Autor, unLibro.Editorial, unLibro.Estado);
+				Console.WriteLine("Titulo: {0}, autor: {1}, editorial: {2}, estado: {3}, código: {4}.", unLibro.Titulo, unLibro.Autor, unLibro.Editorial, unLibro.Estado, unLibro.Codigo);
 			}
 			
 			if (biblioteca.ListaDeLibros.Count == 0) Console.WriteLine("Aún no hay libros en la biblioteca.");
