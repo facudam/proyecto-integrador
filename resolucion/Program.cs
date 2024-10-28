@@ -46,9 +46,9 @@ namespace resolucion
 					case "5":
 						prestarUnLibroDe_(biblioteca);
 						break;
-//					case "6":
-//						devolverUnLibroDe_(biblioteca);
-//						break;
+					case "6":
+						devolverUnLibroDe_(biblioteca);
+						break;
 					case "7":
 						imprimirSubmenuDe_(biblioteca);
 						break;
@@ -116,9 +116,9 @@ namespace resolucion
 					if (unLibro.Codigo == codigo) {
 						if (unLibro.estaDisponible()) {
 							biblioteca.eliminarUnLibro(unLibro);
-							Console.WriteLine("El libro se ha eliminado exitosamente!");
+							Console.WriteLine("\nEl libro se ha eliminado exitosamente!");
 						} else {
-							Console.WriteLine("No se puede eliminar el libro porque se encuentra prestado a un socio.");
+							Console.WriteLine("\nNo se puede eliminar el libro porque se encuentra prestado a un socio.");
 						}
 						existeEseLibro = true;
 						break;
@@ -232,7 +232,7 @@ namespace resolucion
 					prestarLibroASocioLectorEn_(biblioteca);
 					break;
 				case "2":
-					prestarLibroALectorDeSalaEN_(biblioteca);
+					prestarLibroALectorDeSalaEn_(biblioteca);
 					break;
 				case "3":
 					break;
@@ -302,7 +302,7 @@ namespace resolucion
 							if (socioALectorDeSala == null) {
 								libro.asignarLibroPrestado(socio.Dni);
 								socio.incrementarCantidadDeLibros();
-								Console.WriteLine("\nPréstamo realizado!");
+								Console.WriteLine("\nPréstamo realizado con éxito!");
 							} else Console.WriteLine("El socio ingresado es lector de sala y no puede obtener libros desde esta opcion del menú. Vuelva a intentarlo con la segunda opción.");
 							
 						} else {
@@ -321,7 +321,7 @@ namespace resolucion
 		}
 		
 		
-		public static void prestarLibroALectorDeSalaEN_(Biblioteca biblioteca) {
+		public static void prestarLibroALectorDeSalaEn_(Biblioteca biblioteca) {
 			string dni = "";
 			
 			while (dni.Trim().Length < 1) {
@@ -375,7 +375,7 @@ namespace resolucion
 		                    	libro.asignarLibroPrestado(lectorDeSala.Dni);
 								lectorDeSala.incrementarCantidadDeLibros();
 		                        lectorConLista.agregarLibroALista(libro);
-		                        Console.WriteLine("\nPréstamo realizado!");
+		                        Console.WriteLine("\nPréstamo realizado con éxito!");
 		                    } else Console.WriteLine("El socio no es un lector de sala y no puede recibir el libro desde esta opción. Por favor, elija la opción que corresponda en el menu anterior.");
 						} else {
 							throw new PrestamoNoPosibleException("El libro solicitado no está disponible para su préstamo.");
@@ -389,6 +389,75 @@ namespace resolucion
 			}
 			if (!existeLibro) {
 				Console.WriteLine("El código del libro solicitado no pertenece a un libro de la biblioteca.");
+			}
+		}
+		
+		
+		public static void devolverUnLibroDe_(Biblioteca biblioteca) {
+			string dni = "";
+			
+			while (dni.Trim().Length < 1) {
+				try {
+					Console.WriteLine("\nIngrese el DNI del socio que devuelve el libro");
+					dni = Console.ReadLine();
+					if (dni.Trim().Length < 1) throw new EmptyValueException("El DNI no puede estar vacío o tener sólo espacios vacíos.");
+				} catch (EmptyValueException e) {
+					Console.WriteLine(e.Mensaje);
+				}
+			}
+			
+			bool existeSocio = false;
+			
+			foreach(Socio socio in biblioteca.ListaDeSocios) {
+				if (socio.Dni == dni) {
+					existeSocio = true;
+					devolverLibroPedidoPor_En_SiPudiere(socio, biblioteca);
+					break;
+				}
+			}
+			if (!existeSocio) Console.WriteLine("\nEl dni ingresado no pertenece a un socio de la biblioteca.");
+		}
+		
+		public static void devolverLibroPedidoPor_En_SiPudiere(Socio socio, Biblioteca biblioteca) {
+			int codigoLibro;
+			
+			while (true) {
+				try {
+					Console.WriteLine("\nIngrese el código del libro a devolver.");
+					codigoLibro = int.Parse(Console.ReadLine());
+					break;
+					
+				} catch (FormatException e) {
+					Console.WriteLine(e.Message);
+				}
+			}
+			
+			bool existeLibro = false;
+			
+			foreach(Libro libro in biblioteca.ListaDeLibros) {
+				if (libro.Codigo == codigoLibro) {
+					existeLibro = true;
+					devolverLibro_SegunTipoDeSocio_(libro, socio);
+					break;
+				}
+			}
+			if (!existeLibro) Console.WriteLine("El codigo ingresado no pertenece a un libro de la biblioteca.");
+		}
+		
+		public static void devolverLibro_SegunTipoDeSocio_(Libro libro, Socio socio) {
+			if(!libro.estaDisponible() && (libro.DniSocioPrestado == socio.Dni)) {
+				LectorDeSala lectorConLista = socio as LectorDeSala;
+				libro.volverADisponible();
+		        if (lectorConLista != null) { // Si no es null es lector de sala.
+					lectorConLista.decrementarCantidadDeLibros();
+					lectorConLista.quitarLibroDeLista(libro);
+				} else {
+					socio.decrementarCantidadDeLibros();
+				}
+				Console.WriteLine("\nEl libro se ha devuelto con éxito!");
+			} 
+			else {
+				Console.WriteLine("No se puede realizar la transacción de devolucion ya sea por no estar prestado el libro o por no estar prestado por el socio ingresado.");
 			}
 		}
 		
@@ -420,7 +489,7 @@ namespace resolucion
 			
 			foreach(Libro unLibro in biblioteca.ListaDeLibros) {
 				if (!unLibro.estaDisponible()) {
-					Console.WriteLine("Titulo: {0}, autor: {1}, fecha de devolución: {2}", unLibro.Titulo, unLibro.Autor, unLibro.FechaDevolucion);
+					Console.WriteLine("Titulo: {0}, autor: {1}, fecha de devolución: {2}, DNI del socio poseedor: {3}.", unLibro.Titulo, unLibro.Autor, unLibro.FechaDevolucion, unLibro.DniSocioPrestado);
 					cantidadLibrosPrestados += 1; // Para controlar si no hay libros prestados aún.
 				}
 			}
@@ -430,7 +499,7 @@ namespace resolucion
 		public static void listarLibrosDe_(Biblioteca biblioteca) {
 			Console.WriteLine("\nLista de libros de la biblioteca:");
 			foreach(Libro unLibro in biblioteca.ListaDeLibros) {
-				Console.WriteLine("Titulo: {0}, autor: {1}, editorial: {2}", unLibro.Titulo, unLibro.Autor, unLibro.Editorial);
+				Console.WriteLine("Titulo: {0}, autor: {1}, editorial: {2}, estado: {3}.", unLibro.Titulo, unLibro.Autor, unLibro.Editorial, unLibro.Estado);
 			}
 			
 			if (biblioteca.ListaDeLibros.Count == 0) Console.WriteLine("Aún no hay libros en la biblioteca.");
@@ -440,7 +509,7 @@ namespace resolucion
 			Console.WriteLine("Lista de socios de la biblioteca:");
 			
 			foreach(Socio unSocio in unaBiblioteca.ListaDeSocios) {
-				Console.WriteLine("Nombre completo: {0}, DNI: {1}, dirección: {2}.", unSocio.NombreCompleto, unSocio.Dni, unSocio.Direccion);
+				Console.WriteLine("Nombre completo: {0}, DNI: {1}, dirección: {2}, cantidad de libros en posesión: {3}.", unSocio.NombreCompleto, unSocio.Dni, unSocio.Direccion, unSocio.CantidadLibrosPrestados);
 			}
 			
 			if (unaBiblioteca.ListaDeSocios.Count == 0) Console.WriteLine("Aún no hay socios ingresados en la biblioteca.");
