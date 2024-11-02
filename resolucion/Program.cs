@@ -300,7 +300,7 @@ namespace resolucion
 						if (libro.estaDisponible()) {
 							LectorDeSala socioALectorDeSala = socio as LectorDeSala; //Si no es un lector de sala "socioALectorDeSala" será null.
 							if (socioALectorDeSala == null) {
-								libro.asignarLibroPrestado(socio.Dni);
+								libro.asignarLibroPrestado(socio.Dni, false);
 								socio.incrementarCantidadDeLibros();
 								Console.WriteLine("\nPréstamo realizado con éxito!");
 							} else Console.WriteLine("El socio ingresado es lector de sala y no puede obtener libros desde esta opcion del menú. Vuelva a intentarlo con la segunda opción.");
@@ -372,7 +372,7 @@ namespace resolucion
 							// Verificamos si lectorDeSala es de tipo LectorDeSala usando el operador "as"
 		                    LectorDeSala lectorConLista = lectorDeSala as LectorDeSala;
 		                    if (lectorConLista != null) { // Si lectorConLista no es null significa que sí era de tipo LectorDeSala.
-		                    	libro.asignarLibroPrestado(lectorDeSala.Dni);
+		                    	libro.asignarLibroPrestado(lectorDeSala.Dni, true);
 								lectorDeSala.incrementarCantidadDeLibros();
 		                        lectorConLista.agregarLibroALista(libro);
 		                        Console.WriteLine("\nPréstamo realizado con éxito!");
@@ -489,7 +489,7 @@ namespace resolucion
 			
 			foreach(Libro unLibro in biblioteca.ListaDeLibros) {
 				if (!unLibro.estaDisponible()) {
-					Console.WriteLine("Titulo: {0}, autor: {1}, fecha de devolución: {2}, DNI del socio poseedor: {3}, código del libro: {4}.", unLibro.Titulo, unLibro.Autor, unLibro.FechaDevolucion, unLibro.DniSocioPrestado, unLibro.Codigo);
+					Console.WriteLine("\nTitulo: {0}, \nautor: {1}, \nfecha de préstamo: {2} \nfecha de devolución: {3}, \nDNI del socio poseedor: {4}, \ncódigo del libro: {5}.", unLibro.Titulo, unLibro.Autor, unLibro.FechaPrestamo, unLibro.FechaDevolucion, unLibro.DniSocioPrestado, unLibro.Codigo);
 					cantidadLibrosPrestados += 1; // Para controlar si no hay libros prestados aún.
 				}
 			}
@@ -499,7 +499,7 @@ namespace resolucion
 		public static void listarLibrosDe_(Biblioteca biblioteca) {
 			Console.WriteLine("\nLista de libros de la biblioteca:");
 			foreach(Libro unLibro in biblioteca.ListaDeLibros) {
-				Console.WriteLine("Titulo: {0}, autor: {1}, editorial: {2}, estado: {3}, código: {4}.", unLibro.Titulo, unLibro.Autor, unLibro.Editorial, unLibro.Estado, unLibro.Codigo);
+				Console.WriteLine("\nTitulo: {0}, \nautor: {1}, \neditorial: {2}, \nestado: {3}, \ncódigo: {4}.", unLibro.Titulo, unLibro.Autor, unLibro.Editorial, unLibro.Estado, unLibro.Codigo);
 			}
 			
 			if (biblioteca.ListaDeLibros.Count == 0) Console.WriteLine("Aún no hay libros en la biblioteca.");

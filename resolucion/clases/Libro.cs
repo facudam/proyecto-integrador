@@ -67,11 +67,11 @@ namespace resolucion.clases
 			return fechaPrestamo == DateTime.MinValue;
 		}
 		
-		public void asignarLibroPrestado(string dni) {
+		public void asignarLibroPrestado(string dni, bool esParaLectorDeSala) {
 			dniSocioPrestado = dni;
 			fechaPrestamo = DateTime.Now;
-			fechaDevolucion = fechaPrestamo.AddDays(cantidadDeDiasDePrestamo);
 			estado = "prestado";
+			if (!esParaLectorDeSala) fechaDevolucion = fechaPrestamo.AddDays(cantidadDeDiasDePrestamo);
 		}
 		
 		public void volverADisponible() {
