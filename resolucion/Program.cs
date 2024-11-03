@@ -261,11 +261,17 @@ namespace resolucion
 				if (socio.Dni == dni) {
 					existeSocio = true;
 					try {
-						if (socio.CantidadLibrosPrestados == 0) {
-							prestarLibroDeBiblioteca_SiPudiereAlSocio_(biblioteca, socio);
+						LectorDeSala socioALectorDeSala = socio as LectorDeSala; //Si no es un lector de sala "socioALectorDeSala" será null.
+						if(socioALectorDeSala == null) {
+							if (socio.CantidadLibrosPrestados == 0) {
+								prestarLibroDeBiblioteca_SiPudiereAlSocio_(biblioteca, socio);
+							} else {
+								throw new PrestamoNoPosibleException("\nEl socio ingresado no puede recibir más préstamos.");
+							}
 						} else {
-							throw new PrestamoNoPosibleException("\nEl socio ingresado no puede recibir más préstamos.");
+							Console.WriteLine("El socio ingresado es lector de sala y no puede obtener libros desde esta opcion del menú. Vuelva a intentarlo con la segunda opción.");
 						}
+						
 					} catch (PrestamoNoPosibleException e) {
 						Console.WriteLine(e.Mensaje);
 					}
@@ -298,13 +304,9 @@ namespace resolucion
 				if (libro.Codigo == codigoLibro) {
 					try {
 						if (libro.estaDisponible()) {
-							LectorDeSala socioALectorDeSala = socio as LectorDeSala; //Si no es un lector de sala "socioALectorDeSala" será null.
-							if (socioALectorDeSala == null) {
-								libro.asignarLibroPrestado(socio.Dni, false);
-								socio.incrementarCantidadDeLibros();
-								Console.WriteLine("\nPréstamo realizado con éxito!");
-							} else Console.WriteLine("El socio ingresado es lector de sala y no puede obtener libros desde esta opcion del menú. Vuelva a intentarlo con la segunda opción.");
-							
+							libro.asignarLibroPrestado(socio.Dni, false);
+							socio.incrementarCantidadDeLibros();
+							Console.WriteLine("\nPréstamo realizado con éxito!");
 						} else {
 							throw new PrestamoNoPosibleException("El libro solicitado no está disponible para su préstamo.");
 						}
@@ -337,9 +339,16 @@ namespace resolucion
 			bool existeLector = false;
 			
 			foreach(Socio lectorDeSala in biblioteca.ListaDeSocios) {
+				
 				if (lectorDeSala.Dni == dni) {
 					existeLector = true;
-					prestarLibroDeBiblioteca_SiPudiereAlLectorDeSala_(biblioteca, lectorDeSala);
+					// Verificamos si lectorDeSala es de tipo LectorDeSala usando el operador "as"
+					LectorDeSala lectorConLista = lectorDeSala as LectorDeSala;
+					if (lectorConLista != null) {// Si lectorConLista no es null significa que sí era de tipo LectorDeSala.
+						prestarLibroDeBiblioteca_SiPudiereAlLectorDeSala_(biblioteca, lectorConLista);
+					} else {
+						Console.WriteLine("El socio no es un lector de sala y no puede recibir el libro desde esta opción. Por favor, elija la opción que corresponda en el menu anterior.");
+					}
 					break;
 				}
 			}
@@ -349,7 +358,7 @@ namespace resolucion
 			}
 		}
 		
-		public static void prestarLibroDeBiblioteca_SiPudiereAlLectorDeSala_(Biblioteca biblioteca,Socio lectorDeSala) {
+		public static void prestarLibroDeBiblioteca_SiPudiereAlLectorDeSala_(Biblioteca biblioteca,LectorDeSala lectorDeSala) {
 			int codigoLibro;
 			
 			while (true) {
@@ -369,14 +378,10 @@ namespace resolucion
 				if (libro.Codigo == codigoLibro) {
 					try {
 						if (libro.estaDisponible()) {
-							// Verificamos si lectorDeSala es de tipo LectorDeSala usando el operador "as"
-		                    LectorDeSala lectorConLista = lectorDeSala as LectorDeSala;
-		                    if (lectorConLista != null) { // Si lectorConLista no es null significa que sí era de tipo LectorDeSala.
-		                    	libro.asignarLibroPrestado(lectorDeSala.Dni, true);
-								lectorDeSala.incrementarCantidadDeLibros();
-		                        lectorConLista.agregarLibroALista(libro);
-		                        Console.WriteLine("\nPréstamo realizado con éxito!");
-		                    } else Console.WriteLine("El socio no es un lector de sala y no puede recibir el libro desde esta opción. Por favor, elija la opción que corresponda en el menu anterior.");
+	                    	libro.asignarLibroPrestado(lectorDeSala.Dni, true);
+							lectorDeSala.incrementarCantidadDeLibros();
+	                        lectorDeSala.agregarLibroALista(libro);
+	                        Console.WriteLine("\nPréstamo realizado con éxito!");
 						} else {
 							throw new PrestamoNoPosibleException("El libro solicitado no está disponible para su préstamo.");
 						}
