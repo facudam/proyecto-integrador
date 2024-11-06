@@ -304,7 +304,8 @@ namespace resolucion
 				if (libro.Codigo == codigoLibro) {
 					try {
 						if (libro.estaDisponible()) {
-							libro.asignarLibroPrestado(socio.Dni, false);
+							DateTime fechaDevolucion = DateTime.Now.AddDays(15);
+							libro.asignarLibroPrestado(socio.Dni, fechaDevolucion);
 							socio.incrementarCantidadDeLibros();
 							Console.WriteLine("\nPréstamo realizado con éxito!");
 						} else {
@@ -378,7 +379,7 @@ namespace resolucion
 				if (libro.Codigo == codigoLibro) {
 					try {
 						if (libro.estaDisponible()) {
-	                    	libro.asignarLibroPrestado(lectorDeSala.Dni, true);
+	                    	libro.asignarLibroPrestado(lectorDeSala.Dni, DateTime.Now);
 							lectorDeSala.incrementarCantidadDeLibros();
 	                        lectorDeSala.agregarLibroALista(libro);
 	                        Console.WriteLine("\nPréstamo realizado con éxito!");
